@@ -15,17 +15,20 @@ import {
 import { useTimedReset } from "@app/hooks";
 import { TUserSecret } from "@app/hooks/api/userSecrets";
 
+import { SecretTypes } from "./types";
+
 // [HACK ALERT] - This object is used to fliter in only the essential
 // secret data instead of the whole object returned by the backend
-const viewableSecretDataMap = {
-  username: "Username",
-  password: "Password",
-  cardholderName: "Cardholder Name",
-  cardNumber: "Card Number",
-  cardExpirationDate: "Card Expiration Date",
-  title: "Title",
-  content: "Content",
-  additionlNotes: "Additional Notes"
+const viewableSecretKeyDataMap = {
+  username: { value: "Username", secretType: SecretTypes.WebLogin },
+  password: { value: "Password", secretType: SecretTypes.WebLogin },
+  cardholderName: { value: "Cardholder Name", secretType: SecretTypes.CreditCard },
+  cardNumber: { value: "Card Number", secretType: SecretTypes.CreditCard },
+  cardExpirationDate: { value: "Expiration Date", secretType: SecretTypes.CreditCard },
+  cardSecurityCode: { value: "Security Code", secretType: SecretTypes.CreditCard },
+  title: { value: "Title", secretType: SecretTypes.SecureNote },
+  content: { value: "Content", secretType: SecretTypes.SecureNote },
+  additionalNotes: { value: "Additional Notes", secretType: SecretTypes.Any }
 } as any;
 
 export const UserSecretDetails = ({
@@ -60,9 +63,14 @@ export const UserSecretDetails = ({
           {!isUserSecretsEmpty &&
             Object.entries(row).reduce((sum, currentEntry) => {
               const [secret, value] = currentEntry;
-              const secretReadableKey = viewableSecretDataMap[secret];
+              const secretKeyData = viewableSecretKeyDataMap[secret];
+              const secretType = secretKeyData?.secretType;
+              const secretReadableKey = secretKeyData?.value;
 
-              if (secretReadableKey) {
+              const shouldRenderSecretItem =
+                secretType === row.secretType || secretType === SecretTypes.Any;
+
+              if (shouldRenderSecretItem) {
                 sum.push(
                   <Tr key={secret} className="hover:bg-mineshaft-700">
                     <Td>{secretReadableKey || "-"}</Td>

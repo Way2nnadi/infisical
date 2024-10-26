@@ -42,11 +42,12 @@ export const UserSecretsTable = ({ handlePopUpOpen }: Props) => {
             <Th>Name</Th>
             <Th>Type</Th>
             <Th>Created At</Th>
+            <Th>Updated At</Th>
             <Th aria-label="button" className="w-5" />
           </Tr>
         </THead>
         <TBody>
-          {isLoading && <TableSkeleton columns={7} rows={0} innerKey="user-secrets" />}
+          {isLoading && <TableSkeleton columns={5} rows={0} innerKey="user-secrets" />}
           {!isLoading &&
             data?.userSecrets?.map((row) => (
               <UserSecretsRow key={row.id} row={row} handlePopUpOpen={handlePopUpOpen} />

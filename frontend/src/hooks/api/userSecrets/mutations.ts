@@ -17,9 +17,16 @@ export const useCreateUserSecret = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (inputData: TCreateUserSecretRequest) => {
+      const requestData = inputData;
+
+      // Assign name as title for secure note secrets
+      if (inputData?.secretType === "secureNote") {
+        requestData.title = inputData.secretName;
+      }
+
       const { data } = await apiRequest.post<TCreateUserSecretPayload>(
         "/api/v1/user-secrets",
-        inputData
+        requestData
       );
 
       return data;
@@ -30,6 +37,8 @@ export const useCreateUserSecret = () => {
 
 // Update User Secrets
 export const useUpdateUserSecret = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (inputData: TUpdateUserSecretRequest) => {
       const { data } = await apiRequest.put<TUpdateUserSecretPayload>(
@@ -39,12 +48,14 @@ export const useUpdateUserSecret = () => {
 
       return data;
     },
-    onSuccess: () => console.log("useUpdateUserSecret Success")
+    onSuccess: () => queryClient.invalidateQueries(userSecretKeys.allUserSecrets())
   });
 };
 
 // Delete User Secrets
 export const useDeleteUserSecret = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ userSecretId }: TDeleteUserSecretRequest) => {
       const { data } = await apiRequest.delete<TDeleteUserSecretPayload>(
@@ -53,6 +64,6 @@ export const useDeleteUserSecret = () => {
 
       return data;
     },
-    onSuccess: () => console.log("useDeleteUserSecret Success")
+    onSuccess: () => queryClient.invalidateQueries(userSecretKeys.allUserSecrets())
   });
 };

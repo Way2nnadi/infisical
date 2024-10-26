@@ -12,11 +12,13 @@ import { Button, FormControl, Input, Select, SelectItem } from "@app/components/
 import { useCreateUserSecret, useUpdateUserSecret } from "@app/hooks/api";
 import { TUpdateUserSecretRequest, TUserSecret } from "@app/hooks/api/userSecrets";
 
+import { SecretTypes } from "./types";
+
 // Secret Types Options
 const secretTypeOptions = [
-  { label: "Web Login", value: "webLogin" },
-  { label: "Credit Card", value: "creditCard" },
-  { label: "Secure Note", value: "secureNote" }
+  { label: "Web Login", value: SecretTypes.WebLogin },
+  { label: "Credit Card", value: SecretTypes.CreditCard },
+  { label: "Secure Note", value: SecretTypes.SecureNote }
 ];
 
 const userSecretsBaseSchema = z.object({
@@ -73,8 +75,6 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
 
   const onFormCreateSubmit = async (data: FormData) => {
     try {
-      console.log(data);
-
       const { status } = await createUserSecret.mutateAsync(data);
       setCreateUserSecretStatus(status);
 
@@ -86,7 +86,7 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
       });
     } catch (error) {
       setCreateUserSecretStatus("SUCCESS");
-      console.error(error);
+
       createNotification({
         text: "Failed to create a user secret",
         type: "error"
@@ -96,7 +96,6 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
 
   const onFormEditSubmit = async (data: z.infer<typeof userSecretsUpdateSchema>) => {
     try {
-      console.log(data);
       let requestData = {} as TUpdateUserSecretRequest;
 
       // get same keys from updated user secrets
@@ -108,8 +107,6 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
       // compare previous values to the updated form values
       const hasUpdatedData = !isEqual(previousUserSecretKeys, data);
 
-      console.log(updatedUserSecretKeys, previousUserSecretKeys, data, hasUpdatedData);
-
       if (rowData && hasUpdatedData) {
         requestData = {
           ...data,
@@ -118,6 +115,11 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
 
         const { status } = await updateUserSecret.mutateAsync(requestData);
         setCreateUserSecretStatus(status);
+
+        createNotification({
+          text: "Successfully updated user secret",
+          type: "success"
+        });
       } else {
         createNotification({
           text: "There were no changed values",
@@ -125,8 +127,6 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
         });
       }
     } catch (error) {
-      setCreateUserSecretStatus("SUCCESS");
-      console.error(error);
       createNotification({
         text: "Failed to create a user secret",
         type: "error"

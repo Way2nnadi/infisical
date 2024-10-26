@@ -55,9 +55,9 @@ export const registerUserSecretsRouter = async (server: FastifyZodProvider) => {
       rateLimit: readLimit
     },
     schema: {
-      params: z.object({
-        limit: z.number(),
-        offset: z.number()
+      querystring: z.object({
+        offset: z.coerce.number().min(0).max(100).default(0),
+        limit: z.coerce.number().min(1).max(100).default(25)
       }),
       response: {
         200: z.object({
@@ -72,7 +72,7 @@ export const registerUserSecretsRouter = async (server: FastifyZodProvider) => {
       const { status, totalCount, userSecrets } = await req.server.services.userSecrets.getAllUserSecrets({
         actorId: req.permission.id,
         orgId: req.permission.orgId,
-        ...req.params
+        ...req.query
       });
 
       return { status, totalCount, userSecrets };
@@ -120,7 +120,7 @@ export const registerUserSecretsRouter = async (server: FastifyZodProvider) => {
 
   server.route({
     method: "DELETE",
-    url: "/",
+    url: "/:userSecretId",
     config: {
       rateLimit: writeLimit
     },

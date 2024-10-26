@@ -26,7 +26,7 @@ export const useGetUserSecrets = ({
       });
 
       const { data } = await apiRequest.get<{ userSecrets: TUserSecret[]; totalCount: number }>(
-        "/api/v1/user-secrets/",
+        "/api/v1/user-secrets",
         {
           params
         }
