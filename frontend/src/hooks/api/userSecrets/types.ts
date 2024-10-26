@@ -32,6 +32,7 @@ export type TCreateUserSecretRequest = {
 };
 
 export type TCreateUserSecretPayload = {
+  id: string;
   status: string;
 };
 
@@ -51,6 +52,7 @@ export type TUpdateUserSecretRequest = {
 
 export type TUpdateUserSecretPayload = {
   status: string;
+  updatedAt: string;
 };
 
 export type TDeleteUserSecretRequest = {

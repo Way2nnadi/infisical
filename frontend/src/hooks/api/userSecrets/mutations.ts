@@ -18,7 +18,7 @@ export const useCreateUserSecret = () => {
   return useMutation({
     mutationFn: async (inputData: TCreateUserSecretRequest) => {
       const { data } = await apiRequest.post<TCreateUserSecretPayload>(
-        "/api/v1/user-secret",
+        "/api/v1/user-secrets",
         inputData
       );
 
@@ -33,7 +33,7 @@ export const useUpdateUserSecret = () => {
   return useMutation({
     mutationFn: async (inputData: TUpdateUserSecretRequest) => {
       const { data } = await apiRequest.put<TUpdateUserSecretPayload>(
-        "/api/v1/user-secret",
+        "/api/v1/user-secrets",
         inputData
       );
 
@@ -48,7 +48,7 @@ export const useDeleteUserSecret = () => {
   return useMutation({
     mutationFn: async ({ userSecretId }: TDeleteUserSecretRequest) => {
       const { data } = await apiRequest.delete<TDeleteUserSecretPayload>(
-        `/api/v1/user-secret/${userSecretId}`
+        `/api/v1/user-secrets/${userSecretId}`
       );
 
       return data;

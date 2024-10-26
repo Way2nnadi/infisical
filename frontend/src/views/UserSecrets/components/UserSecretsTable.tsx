@@ -26,34 +26,10 @@ type Props = {
   ) => void;
 };
 
-const testData = {
-  totalCount: 1,
-  userSecrets: [
-    {
-      id: "123",
-      userId: "123",
-      orgId: "123",
-      createdAt: "10/10/24",
-      updatedAt: "10/10/24",
-      secretType: "creditCard",
-      secretName: "Test Web Login",
-      username: "Uche",
-      password: "1234",
-      cardholderName: "Uche Nnadi",
-      cardNumber: "1234",
-      cardExpirationDate: "10/24",
-      cardSecurityCode: "123",
-      title: "Test Web Login",
-      content: "test test test",
-      additionalNotes: "test test"
-    }
-  ]
-};
-
 export const UserSecretsTable = ({ handlePopUpOpen }: Props) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const { isLoading, data = testData } = useGetUserSecrets({
+  const { isLoading, data } = useGetUserSecrets({
     offset: (page - 1) * perPage,
     limit: perPage
   });
