@@ -47,7 +47,7 @@ export const UserSecretSection = () => {
   return (
     <div className="mb-6 rounded-lg border border-mineshaft-600 bg-mineshaft-900 p-4">
       <Head>
-        <title>Secret Sharing</title>
+        <title>User Secrets</title>
         <link rel="icon" href="/infisical.ico" />
         <meta property="og:image" content="/images/message.png" />
       </Head>

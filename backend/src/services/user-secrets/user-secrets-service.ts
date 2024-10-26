@@ -1,6 +1,7 @@
 import { DatabaseError } from "@app/lib/errors";
 
 import { TUserSecretsDALFactory } from "./user-secrets-dal";
+import { capitalizeWords } from "./user-secrets-fns";
 import {
   Statuses,
   TCreateUserSecretDTO,
@@ -35,16 +36,24 @@ export const userSecretsServiceFactory = ({ userSecretsDAL }: TUserSecretsServic
     } = userSecretCreatePayload;
 
     try {
+      // handle capitalizing secretName and title
+      const capitalizedSecretName = capitalizeWords(secretName);
+      let capitalizedTitle = title;
+
+      if (secretType === "secureNote") {
+        capitalizedTitle = capitalizedSecretName;
+      }
+
       const { id } = await userSecretsDAL.create({
         secretType,
-        secretName,
+        secretName: capitalizedSecretName,
         username,
         password,
         cardholderName,
         cardNumber,
         cardExpirationDate,
         cardSecurityCode,
-        title,
+        title: capitalizedTitle,
         content,
         additionalNotes,
         userId: actorId,
@@ -90,6 +99,7 @@ export const userSecretsServiceFactory = ({ userSecretsDAL }: TUserSecretsServic
     const {
       id: userSecretId,
       secretName,
+      secretType,
       username,
       password,
       cardholderName,
@@ -102,15 +112,23 @@ export const userSecretsServiceFactory = ({ userSecretsDAL }: TUserSecretsServic
     } = updateUserSecretPayload;
 
     try {
+      // handle capitalizing secretName and title
+      const capitalizedSecretName = capitalizeWords(secretName);
+      let capitalizedTitle = title;
+
+      if (secretType === "secureNote") {
+        capitalizedTitle = capitalizedSecretName;
+      }
+
       const { updatedAt } = await userSecretsDAL.updateById(userSecretId, {
-        secretName,
+        secretName: capitalizedSecretName,
         username,
         password,
         cardholderName,
         cardNumber,
         cardExpirationDate,
         cardSecurityCode,
-        title,
+        title: capitalizedTitle,
         content,
         additionalNotes
       });

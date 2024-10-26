@@ -23,6 +23,7 @@ export type TGetUserSecretDTO = {
 
 export type TUpdateUserSecretDTO = {
   id: string;
+  secretType: string;
   secretName?: string;
   username?: string;
   password?: string;

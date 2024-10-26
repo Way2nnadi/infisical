@@ -110,7 +110,8 @@ export const UserSecretForm = ({ rowData }: { rowData?: TUserSecret }) => {
       if (rowData && hasUpdatedData) {
         requestData = {
           ...data,
-          id: rowData.id
+          id: rowData.id,
+          secretType: rowData.secretType
         };
 
         const { status } = await updateUserSecret.mutateAsync(requestData);

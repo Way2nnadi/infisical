@@ -18,7 +18,7 @@ export const ViewUserSecretsModal = ({ popUp, handlePopUpToggle }: Props) => {
         handlePopUpToggle("viewUserSecret", isOpen);
       }}
     >
-      <ModalContent title="User Secret Details">
+      <ModalContent title={data?.secretName || "User Secret Details"}>
         <UserSecretDetails row={data} />
       </ModalContent>
     </Modal>

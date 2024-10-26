@@ -38,6 +38,7 @@ export type TCreateUserSecretPayload = {
 
 export type TUpdateUserSecretRequest = {
   id: string;
+  secretType: string;
   secretName?: string;
   username?: string;
   password?: string;
